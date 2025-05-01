@@ -1,0 +1,169 @@
+{% extends "food/base.html" %}
+{% block title %}All Recipes - FlavorFiesta{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-light py-5 text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold text-primary">All Recipes</h1>
+    <p class="lead mb-0">Explore our complete collection of delicious culinary creations</p>
+  </div>
+</section>
+
+<!-- Filter Bar -->
+<section class="container my-5">
+  <div class="card border-0 shadow-sm rounded-4">
+    <div class="card-body">
+      <form action="" method="GET" class="row g-3 justify-content-center">
+        <div class="col-md-6 col-lg-5 col-xl-4 mx-auto">
+          <div class="input-group">
+            <input type="text" name="recipe_title" class="form-control" placeholder="Search recipes..." required>
+            <button class="btn btn-primary" type="submit">
+              <i class="bi bi-search"></i> Search
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<!-- Recipe Grid -->
+<section class="container mb-5">
+  <div class="row g-4">
+    {% for recipe in recipes %}
+    <div class="col-sm-6 col-lg-4 col-xl-3">
+      <div class="card h-100 shadow-sm border-0 rounded-4 recipe-card">
+        {% if recipe.image %}
+        <div class="position-relative">
+          <img src="{{ recipe.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="{{ recipe.name }}">
+          <div class="recipe-overlay">
+            <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-light rounded-circle p-2 mx-1">
+              <i class="bi bi-eye-fill"></i>
+            </a>
+            <button class="btn btn-light rounded-circle p-2 mx-1">
+              <i class="bi bi-heart"></i>
+            </button>
+            <button class="btn btn-light rounded-circle p-2 mx-1">
+              <i class="bi bi-bookmark"></i>
+            </button>
+          </div>
+          {% if recipe.is_featured %}
+          <span class="badge bg-warning position-absolute top-0 end-0 m-2">
+            <i class="bi bi-star-fill me-1"></i> Featured
+          </span>
+          {% endif %}
+          <span class="badge bg-light text-dark position-absolute top-0 start-0 m-2">{{ recipe.difficulty|default:"Easy" }}</span>
+        </div>
+        {% else %}
+        <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+          <i class="bi bi-camera text-muted fs-1"></i>
+        </div>
+        {% endif %}
+
+        <div class="card-body d-flex flex-column p-3">
+          <span class="badge bg-light text-dark mb-2">{{ recipe.category|default:"Main Course" }}</span>
+          <h5 class="card-title fw-bold">{{ recipe.name }}</h5>
+          <p class="card-text text-muted small flex-grow-1">{{ recipe.description|truncatewords:15 }}</p>
+          <div class="d-flex justify-content-between text-muted small my-3">
+            <span><i class="bi bi-clock me-1"></i>{{ recipe.cooking_time|default:"30 min" }}</span>
+            <span><i class="bi bi-people me-1"></i>{{ recipe.servings|default:"4" }}</span>
+            <span><i class="bi bi-star-fill me-1"></i>{{ recipe.rating|default:"4.5" }}</span>
+          </div>
+          <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-outline-success w-100">View Recipe</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="card p-5 text-center shadow-sm border-0 rounded-4">
+        <img src="/static/images/empty-recipes.svg" alt="No recipes found" class="img-fluid mb-4" style="max-height: 200px;">
+        <h3>No Recipes Found</h3>
+        <p class="text-muted">Try adjusting your filters or add a new recipe!</p>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="?" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Clear Filters
+          </a>
+          <a href="{% url 'recipes:create' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-2"></i>Add New Recipe
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% if recipes.has_other_pages %}
+  <div class="d-flex justify-content-between align-items-center mt-5">
+    <small class="text-muted">
+      Showing <strong>{{ recipes.start_index }}</strong> to <strong>{{ recipes.end_index }}</strong> of <strong>{{ paginator.count }}</strong> recipes
+    </small>
+    <ul class="pagination mb-0">
+      {% if recipes.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ recipes.previous_page_number }}" aria-label="Previous">
+          <i class="bi bi-chevron-left"></i>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+      </li>
+      {% endif %}
+
+      {% for i in recipes.paginator.page_range %}
+      <li class="page-item {% if recipes.number == i %}active{% endif %}">
+        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+      </li>
+      {% endfor %}
+
+      {% if recipes.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ recipes.next_page_number }}" aria-label="Next">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+</section>
+
+
+<style>
+  .recipe-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .recipe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  }
+  .recipe-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .recipe-card:hover .recipe-overlay {
+    opacity: 1;
+  }
+  .page-link {
+    color: var(--primary-color);
+    border-radius: 0.5rem;
+  }
+  .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+</style>
+{% endblock %}

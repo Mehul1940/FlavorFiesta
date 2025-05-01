@@ -1,0 +1,78 @@
+{% extends 'food/base.html' %}
+{% block content %}
+<div class="container py-5">
+    <!-- Stylish category header -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="bg-light rounded-3 p-4 shadow-sm">
+                <h2 class="mb-0 text-center fw-bold text-primary">{{ category.name }}</h2>
+            </div>
+        </div>
+    </div>
+    
+    {% if products %}
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 product-card">
+                <!-- Image with fixed height for consistency -->
+                <div class="product-img-container">
+                    <img src="{{ product.image.url }}" class="card-img-top object-fit-cover" alt="{{ product.name }}" height="180">
+                </div>
+                <div class="card-body text-center d-flex flex-column">
+                    <!-- Product name with text truncation -->
+                    <h5 class="card-title text-truncate mb-2">{{ product.name }}</h5>
+                    <!-- Price with better styling -->
+                    <p class="card-text fw-bold text-primary mb-3">₹{{ product.price }}</p>
+                    <!-- Button moved to the bottom with margin-top:auto -->
+                    <div class="mt-auto">
+                        <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-4">View</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Improved empty state message -->
+    <div class="row">
+        <div class="col-md-6 mx-auto text-center py-5">
+            <div class="empty-state p-5 bg-light rounded-3 shadow-sm">
+                <i class="bi bi-basket display-4 text-muted mb-3"></i>
+                <p class="text-muted lead">No items found in this category.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Custom CSS for enhanced design -->
+<style>
+    .product-card {
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+    
+    .product-img-container {
+        overflow: hidden;
+    }
+    
+    .card-img-top {
+        transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+    
+    .empty-state {
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,586 @@
+:root {
+    --primary-color:#9E2A2F; /* Richer, deeper vibrant orange */
+    --primary-dark: #D35D16; /* Darker, richer orange-brown */
+    --secondary-color: #9E2A2F; /* Rich, grounded red */
+    --accent-color: #FF9F00; /* Soft gold/yellow */
+    --success-color: #4A9D4F; /* Muted, earthy green */
+    --light-bg: #fefefeb7; /* Warm cream with a hint of peach */
+    --dark-bg: #2E1E1C; /* Soft deep burgundy brown */
+    --dark-content: #3C2A2A; /* Neutral brown for text */
+}
+     
+
+body {
+    font-family: 'Poppins', sans-serif;
+    padding-top: 60px;
+    background-color: var(--light-bg);
+    transition: all 0.4s ease;
+}
+
+h1, h2, h3, .navbar-brand, .display-text {
+    font-family: 'Playfair Display', serif;
+}
+
+.navbar {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    transition: all 0.4s ease;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.6rem;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand span {
+    color: var(--accent-color);
+    position: relative;
+}
+
+/* Expanded hover effects */
+.hover-scale {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-scale:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.hover-scale::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: var(--accent-color);
+    transition: all 0.4s ease;
+}
+
+.hover-scale:hover::before {
+    left: 0;
+}
+
+/* Card styling */
+.card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card:hover {
+    box-shadow: 0 15px 30px rgba(229, 124, 35, 0.15);
+    transform: translateY(-8px);
+}
+
+.card-img-container {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-img-container img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    transition: transform 0.6s ease;
+}
+
+.card:hover .card-img-container img {
+    transform: scale(1.12);
+}
+
+.card-img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.card:hover .card-img-overlay {
+    opacity: 1;
+}
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.card:hover .card-badge {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Hero section */
+.hero-section {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    position: relative;
+    padding: 8rem 0;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(140, 52, 32, 0.85), rgba(229, 124, 35, 0.8));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+.hero-btn {
+    padding: 12px 30px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.hero-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    z-index: -1;
+}
+
+.hero-btn:hover::before {
+    height: 100%;
+}
+
+/* Food Icon Decorations */
+.food-icon {
+    position: absolute;
+    opacity: 0.08;
+    z-index: 0;
+    transform: rotate(var(--rotate, 0deg));
+    font-size: var(--size, 5rem);
+}
+
+.icon-1 {
+    top: 10%;
+    left: 5%;
+    --rotate: 15deg;
+    --size: 4rem;
+}
+
+.icon-2 {
+    bottom: 15%;
+    right: 7%;
+    --rotate: -20deg;
+    --size: 6rem;
+}
+
+.icon-3 {
+    bottom: 30%;
+    left: 15%;
+    --rotate: 10deg;
+    --size: 3.5rem;
+}
+
+.icon-4 {
+    top: 25%;
+    right: 15%;
+    --rotate: -10deg;
+    --size: 4.5rem;
+}
+
+/* Food-themed section headers */
+.section-header {
+    position: relative;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+}
+
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: var(--primary-color);
+}
+
+.section-header.text-center::after {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Footer styling */
+footer {
+    background: linear-gradient(135deg, var(--secondary-color), var(--dark-bg));
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '🍽️';
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 4rem;
+    opacity: 0.1;
+    transform: rotate(15deg);
+}
+
+footer::after {
+    content: '🍽️';
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    font-size: 3rem;
+    opacity: 0.1;
+    transform: rotate(-10deg);
+}
+
+/* Empty state */
+.empty-state {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 5rem;
+    color: var(--primary-color);
+    opacity: 0.5;
+    margin-bottom: 2rem;
+}
+
+/* Custom utilities */
+.text-shadow {
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+}
+
+/* Theme colors */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* Accented buttons */
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+.btn-accent:hover {
+    background-color: #EB9500;
+    border-color: #EB9500;
+    color: #fff;
+}
+
+/* Dark mode toggle */
+.dark-mode {
+    background-color: var(--dark-bg);
+    color: #f8f9fa;
+}
+
+.dark-mode .card {
+    background-color: var(--dark-content);
+    color: #f8f9fa;
+}
+
+.dark-mode .card-footer {
+    background-color: rgba(0,0,0,0.1) !important;
+    border-top-color: rgba(255,255,255,0.1);
+}
+
+/* Animated components */
+.animated-icon {
+    transition: all 0.3s ease;
+}
+
+.animated-icon:hover {
+    transform: scale(1.2);
+}
+
+/* Nav item animations */
+.nav-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+
+/* Food rating stars */
+.rating {
+    color: var(--accent-color);
+}
+
+/* Animated scrolling button */
+#scrollToTop {
+    background-color: var(--primary-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+#scrollToTop:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+#scrollToTop i {
+    transition: transform 0.3s ease;
+}
+
+#scrollToTop:hover i {
+    transform: translateY(-3px);
+}
+
+/* Food-themed input focus */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(229, 124, 35, 0.25);
+}
+
+/* Cookie consent */
+#cookieConsent {
+    border-top: 3px solid var(--primary-color);
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+    transition: all 0.5s ease;
+}
+
+/* Category pills */
+.category-pill {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 30px;
+    padding: 8px 18px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin: 5px;
+    display: inline-block;
+}
+
+.category-pill:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Ingredient list styling */
+.ingredient-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+}
+
+.ingredient-item:before {
+    content: '🍲';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1rem;
+}
+
+/* Step instructions */
+.step-instruction {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 25px;
+    min-height: 40px;
+}
+
+.step-instruction:before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Custom loader */
+.food-loader {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--light-bg);
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Food information badges */
+.food-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.badge-time {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.badge-difficulty {
+    background-color: #FFF3E0;
+    color: #E65100;
+}
+
+.badge-spicy {
+    background-color: #FFEBEE;
+    color: #C62828;
+}
+
+.badge-veg {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+/* Toast notification */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    background: white;
+    border-left: 5px solid var(--primary-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+.toast-icon {
+    margin-right: 15px;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+/* Recipe card hover overlay */
+.recipe-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    transform: translateY(100%);
+    transition: all 0.4s ease;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.card:hover .recipe-actions {
+    transform: translateY(0);
+}
+
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}

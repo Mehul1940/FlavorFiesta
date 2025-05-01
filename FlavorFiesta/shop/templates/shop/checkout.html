@@ -1,0 +1,142 @@
+{% extends 'food/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Checkout Progress -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="d-flex justify-content-center">
+                <div class="text-center">
+                    <span class="badge bg-primary rounded-circle p-3">1</span>
+                    <p class="mt-2 mb-0 small">Cart Review</p>
+                </div>
+                <div class="align-self-center mx-2" style="width: 80px;">
+                    <hr class="text-muted">
+                </div>
+                <div class="text-center">
+                    <span class="badge bg-secondary rounded-circle p-3">2</span>
+                    <p class="mt-2 mb-0 small">Checkout</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <!-- Order Summary -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0"><i class="bi bi-cart-check me-2"></i>Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for item in cart_items %}
+                        <div class="list-group-item d-flex justify-content-between align-items-start py-3">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">{{ item.item.name }}</div>
+                                <small class="text-muted">Qty: {{ item.quantity }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">₹{{ item.get_total }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <h5 class="mb-0">Total:</h5>
+                        <h3 class="mb-0 text-primary">₹{{ total_amount }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0"><i class="bi bi-truck me-2"></i>Shipping Details</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'shop:checkout' %}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Shipping Address -->
+                        <div class="mb-4">
+                            <label for="address" class="form-label">Shipping Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                <textarea class="form-control" id="address" name="shipping_address" 
+                                          rows="3" placeholder="Enter complete address" required></textarea>
+                                <div class="invalid-feedback">
+                                    Please enter your shipping address.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Payment Method</h5>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment" 
+                                           id="cod" checked>
+                                    <label class="form-check-label" for="cod">
+                                        <i class="bi bi-wallet2 me-2"></i>Cash on Delivery
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="payment" 
+                                           id="online" disabled>
+                                    <label class="form-check-label text-muted" for="online">
+                                        <i class="bi bi-credit-card me-2"></i>Online Payment
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Place Order
+                            </button>
+                            <a href="{% url 'shop:cart' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Return to Cart
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    .input-group-text {
+        min-width: 45px;
+        justify-content: center;
+    }
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>
+
+<script>
+    // Form validation
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+{% endblock %}

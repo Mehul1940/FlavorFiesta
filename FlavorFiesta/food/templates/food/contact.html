@@ -1,0 +1,146 @@
+{% extends 'food/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
+<section class="contact-section bg-light">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <!-- Contact Info Column -->
+              <div class="col-md-5 bg-primary text-white p-5">
+                <div class="h-100 d-flex flex-column justify-content-center">
+                  <h3 class="mb-4"><i class="bi bi-chat-dots-fill me-2"></i>Get in Touch</h3>
+                  <ul class="list-unstyled">
+                    <li class="mb-4">
+                      <i class="bi bi-geo-alt-fill h4 me-2"></i>
+                      <h5>Visit Us</h5>
+                      <p>123 Food Street<br>New York, NY 10001</p>
+                    </li>
+                    <li class="mb-4">
+                      <i class="bi bi-telephone-fill h4 me-2"></i>
+                      <h5>Call Us</h5>
+                      <p>+1 800 123 4567<br>Mon-Fri: 9am-8pm</p>
+                    </li>
+                    <li>
+                      <i class="bi bi-envelope-fill h4 me-2"></i>
+                      <h5>Email Us</h5>
+                      <p>support@foodapp.com<br>help@foodapp.com</p>
+                    </li>
+                  </ul>
+                  <div class="mt-auto">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex gap-3">
+                      <a href="#" class="text-white"><i class="bi bi-facebook h4"></i></a>
+                      <a href="#" class="text-white"><i class="bi bi-twitter h4"></i></a>
+                      <a href="#" class="text-white"><i class="bi bi-instagram h4"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact Form Column -->
+              <div class="col-md-7 p-5">
+                <h2 class="card-title mb-4">Send Us a Message</h2>
+                <form method="post" class="needs-validation" novalidate>
+                  {% csrf_token %}
+                  <div class="mb-4">
+                    <label for="name" class="form-label">Your Name</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                      <input type="text" class="form-control" id="name" name="name" 
+                             placeholder="John Doe" required>
+                      <div class="invalid-feedback">Please enter your name</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="email" class="form-label">Your Email</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                      <input type="email" class="form-control" id="email" name="email"
+                             placeholder="example@email.com" required>
+                      <div class="invalid-feedback">Please enter a valid email</div>
+                    </div>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="message" class="form-label">Message</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-chat-text-fill"></i></span>
+                      <textarea class="form-control" id="message" name="message" 
+                                rows="5" placeholder="Write your message here..." required></textarea>
+                      <div class="invalid-feedback">Please enter your message</div>
+                    </div>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">
+                      <i class="bi bi-send-fill me-2"></i>Send Message
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-group-text {
+    background-color: #e9ecef;
+    border: none;
+  }
+  
+  .form-control {
+    border-left: 0;
+  }
+  
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+  }
+  
+  .invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+  }
+  
+  .was-validated .form-control:invalid ~ .invalid-feedback {
+    display: block;
+  }
+</style>
+
+<script>
+  // Bootstrap form validation
+  (() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
+{% endblock %}

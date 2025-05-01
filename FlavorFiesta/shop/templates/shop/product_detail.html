@@ -1,0 +1,77 @@
+{% extends 'food/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop:product_list' %}">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-5 mb-4">
+            <div class="card border-0">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded" />
+                {% else %}
+                    <div class="bg-light text-center p-5 rounded">
+                        <i class="bi bi-image text-secondary" style="font-size: 5rem;"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-7">
+            <h1 class="display-5 fw-bold mb-3">{{ product.name }}</h1>
+
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge {% if product.is_vegetarian %}bg-success{% else %}bg-danger{% endif %} me-2">
+                    {% if product.is_vegetarian %}Vegetarian{% else %}Non-Vegetarian{% endif %}
+                </span>
+                {% if product.category %}
+                    <span class="badge bg-secondary">{{ product.category }}</span>
+                {% endif %}
+                {% if product.is_featured %}
+                    <span class="badge bg-warning text-dark ms-2">Featured</span>
+                {% endif %}
+            </div>
+
+            <h2 class="fs-2 text-primary mb-4">${{ product.price }}</h2>
+
+            <div class="mb-4">
+                <h5 class="fw-bold">Description</h5>
+                <p class="lead">{{ product.description }}</p>
+            </div>
+
+            {% if ingredients %}
+            <div class="mb-4">
+                <h5 class="fw-bold">Ingredients</h5>
+                <ul class="list-group list-group-flush">
+                    {% for ingredient in ingredients %}
+                    <li class="list-group-item px-0">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        {{ ingredient }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'shop:add_to_cart' product.pk %}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                </a>
+                <a href="{% url 'shop:product_list' %}" class="btn btn-outline-secondary btn-lg ms-2">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

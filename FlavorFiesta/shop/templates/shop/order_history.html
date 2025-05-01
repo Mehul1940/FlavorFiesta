@@ -1,0 +1,47 @@
+{% extends 'food/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Your Order History</h2>
+
+    <!-- Order List -->
+    <div class="row">
+        {% if orders %}
+            {% for order in orders %}
+                <div class="col-lg-6 mb-4">
+                    <div class="card border-0 shadow-lg">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h5 class="mb-0">Order #{{ order.id }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+                            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+                            <p><strong>Status:</strong> {{ order.status }}</p>
+
+                            <a href="{% url 'shop:order_confirmation' order.id %}" class="btn btn-primary">View Order Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info" role="alert">
+                    You haven't placed any orders yet.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+    .btn {
+        border-radius: 0.5rem;
+    }
+</style>
+
+{% endblock %}

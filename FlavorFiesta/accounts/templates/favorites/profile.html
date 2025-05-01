@@ -1,0 +1,276 @@
+{% extends 'food/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+      <!-- Enhanced Profile Card -->
+      <div class="card border-0 shadow-sm overflow-hidden">
+        <!-- Card Header with Custom Color -->
+        <div class="card-header py-3" style="background-color: #9E2A2F; color: white;">
+          <div class="d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0 fw-bold">
+              <i class="bi bi-person-badge me-2"></i>My Profile
+            </h2>
+            <span class="badge bg-light" style="color: #9E2A2F;">
+              Member since {{ request.user.date_joined|date:"M Y" }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="card-body p-0">
+          <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            <div class="row g-0">
+              <!-- Profile Image Section -->
+              <div class="col-md-4 bg-light p-4 d-flex flex-column align-items-center">
+                <div class="position-relative mb-3">
+                  <div class="profile-image-container">
+                    {% if form.instance.profile_image %}
+                      <img src="{{ form.instance.profile_image.url }}" 
+                          class="img-thumbnail rounded-circle shadow mb-3 profile-image" 
+                          alt="Profile Image"
+                          id="profile-image-preview">
+                    {% else %}
+                      <div class="profile-placeholder rounded-circle d-flex align-items-center justify-content-center shadow"
+                          id="profile-image-placeholder">
+                        <i class="bi bi-person text-muted"></i>
+                      </div>
+                    {% endif %}
+                    
+                    <!-- Image Upload Button -->
+                    <label for="id_profile_image" class="btn btn-danger position-absolute bottom-0 end-0 rounded-circle p-2 image-upload-btn"
+                          style="z-index: 1;">
+                      <i class="bi bi-camera-fill"></i>
+                      <input type="file" name="profile_image" accept="image/*" 
+                            class="d-none" id="id_profile_image"
+                            onchange="previewImage(this)">
+                    </label>
+                  </div>
+                </div>
+
+                <div class="text-center w-100">
+                  <h3 class="h5 fw-bold mb-1">{{ request.user.get_full_name|default:request.user.username }}</h3>
+                  <p class="text-muted mb-2">
+                    <i class="bi bi-envelope-fill me-1"></i>{{ request.user.email }}
+                  </p>
+                  
+                  {% if form.instance.location %}
+                  <p class="text-muted mb-3">
+                    <i class="bi bi-geo-alt-fill me-1"></i>{{ form.instance.location }}
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <!-- Profile Form Section -->
+              <div class="col-md-8 p-4">
+                <!-- Bio Field -->
+                <div class="mb-4">
+                  <label for="id_bio" class="form-label fw-bold" style="color: #9E2A2F;">
+                    <i class="bi bi-file-text me-1"></i>About You
+                  </label>
+                  {{ form.bio|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Tell us about yourself..." }}
+                  <div class="form-text text-muted">Max 500 characters</div>
+                </div>
+                
+                <div class="row g-3">
+                  <!-- Location Field -->
+                  <div class="col-md-6">
+                    <label for="id_location" class="form-label fw-bold" style="color: #9E2A2F;">
+                      <i class="bi bi-geo-alt me-1"></i>Location
+                    </label>
+                    {{ form.location|add_class:"form-control"|attr:"placeholder:City, Country" }}
+                  </div>
+                  
+                  <!-- Birth Date Field -->
+                  <div class="col-md-6">
+                    <label for="id_birth_date" class="form-label fw-bold" style="color: #9E2A2F;">
+                      <i class="bi bi-calendar-heart me-1"></i>Birth Date
+                    </label>
+                    {{ form.birth_date|add_class:"form-control"|attr:"type:date" }}
+                  </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+                  <div>
+                    {% if form.instance.profile_image %}
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="clear-image">
+                      <i class="bi bi-trash me-1"></i>Remove Photo
+                    </button>
+                    {% endif %}
+                  </div>
+                  <button type="submit" class="btn" style="background-color: #9E2A2F; color: white;">
+                    <i class="bi bi-save me-1"></i>Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+  /* Custom color variables */
+  :root {
+    --custom-primary: #9E2A2F;
+    --custom-primary-light: rgba(158, 42, 47, 0.1);
+    --custom-primary-lighter: rgba(158, 42, 47, 0.05);
+  }
+  
+  /* Profile image styling */
+  .profile-image-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+  }
+  
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+  }
+  
+  .profile-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    color: #dee2e6;
+    transition: all 0.3s ease;
+  }
+  
+  .image-upload-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .image-upload-btn:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Form styling */
+  .form-control:focus, .form-select:focus {
+    border-color: var(--custom-primary);
+    box-shadow: 0 0 0 0.25rem rgba(158, 42, 47, 0.25);
+  }
+  
+  /* Card styling */
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 0.5rem;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 767.98px) {
+    .profile-image-container {
+      width: 150px;
+      height: 150px;
+    }
+    
+    .profile-placeholder {
+      font-size: 3.5rem;
+    }
+    
+    .col-md-4, .col-md-8 {
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- Script for Image Upload Preview -->
+<script>
+  function previewImage(input) {
+    const preview = document.getElementById('profile-image-preview');
+    const placeholder = document.getElementById('profile-image-placeholder');
+    
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        // If preview exists, update it
+        if (preview) {
+          preview.src = e.target.result;
+        } 
+        // If placeholder exists, replace it with new image
+        else if (placeholder) {
+          placeholder.innerHTML = `
+            <img src="${e.target.result}" 
+                 class="img-thumbnail rounded-circle shadow profile-image" 
+                 alt="Profile Image"
+                 id="profile-image-preview">`;
+        }
+      };
+      
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Enable Bootstrap validation
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+    
+    // Clear image button functionality
+    const clearImageBtn = document.getElementById('clear-image');
+    if (clearImageBtn) {
+      clearImageBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('id_profile_image').value = '';
+        const preview = document.getElementById('profile-image-preview');
+        const placeholder = document.getElementById('profile-image-placeholder');
+        
+        if (preview) {
+          preview.remove();
+          // Recreate the placeholder
+          const container = document.querySelector('.profile-image-container');
+          container.innerHTML = `
+            <div class="profile-placeholder rounded-circle d-flex align-items-center justify-content-center shadow"
+                 id="profile-image-placeholder">
+              <i class="bi bi-person text-muted"></i>
+            </div>
+            <label for="id_profile_image" class="btn btn-danger position-absolute bottom-0 end-0 rounded-circle p-2 image-upload-btn"
+                   style="z-index: 1;">
+              <i class="bi bi-camera-fill"></i>
+              <input type="file" name="profile_image" accept="image/*" 
+                     class="d-none" id="id_profile_image"
+                     onchange="previewImage(this)">
+            </label>`;
+        }
+      });
+    }
+  });
+</script>
+{% endblock %}

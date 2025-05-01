@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodApp{% endblock %} - Delicious Meals</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="d-flex flex-column min-vh-100">
+     <!-- Navbar -->
+     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid px-3 px-md-5">
+            <a class="navbar-brand" href="/food">Flavor<span>Fiesta</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/food">
+                            <i class="bi bi-house-door-fill"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {% if '/recipes/' in request.path %}active{% endif %}" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-journal-text"></i> Recipes
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/recipes/">All Recipes</a></li>
+                            <li><a class="dropdown-item" href="/recipes/popular/">Popular Recipes</a></li>
+                            <li><a class="dropdown-item" href="/recipes/new/">New Recipes</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/recipes/create/">Submit Recipe</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/category/' in request.path %}active{% endif %}" href="/category/">
+                            <i class="bi bi-grid-3x3-gap-fill"></i> Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/shop/' in request.path %}active{% endif %}" href="/shop/">
+                            <i class="bi bi-bag-fill"></i> Shop
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/about/' in request.path %}active{% endif %}" href="/food/about/">
+                            <i class="bi bi-info-circle-fill"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if '/contact/' in request.path %}active{% endif %}" href="/food/contact/">
+                            <i class="bi bi-chat-dots-fill"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Right Side (Search, User, Cart) -->
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <!-- Search Form -->
+                    <form class="d-flex" action="" method="get">
+                        <div class="input-group input-group-sm">
+                            <input type="search" name="food_name" class="form-control" placeholder="Search...">
+                            <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+
+                    <!-- User Menu -->
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-person-circle"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">My Profile</a></li>
+                                <li><a class="dropdown-item" href="{% url 'accounts:favorite_recipes' %}">My Favorites</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url "accounts:logout" %}">Logout</a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{% url 'accounts:register' %}" class="btn btn-light btn-sm">Register</a>
+                    {% endif %}
+
+                    <!-- Cart & Orders -->
+                    <a href="/shop/cart" class="btn btn-outline-light btn-sm position-relative">
+                        <i class="bi bi-cart-fill"></i>
+                    </a>
+                    <a href="{% url 'shop:order_history' %}" class="btn btn-outline-light btn-sm">
+                        <i class="bi bi-boxes"></i> Recently Ordered
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% block hero %} {% endblock %} 
+
+    <!-- Content -->
+    <main class="flex-grow-1 mt-5 pt-3">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="text-white py-5 mt-auto">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h5 class="mb-3">About FoodApp</h5>
+                    <p class="text-white-50">FoodApp brings delicious food right to your doorstep. Explore our diverse menu featuring cuisines from around the world.</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/food" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li><a href="/menu/" class="text-white-50 text-decoration-none">Menu</a></li>
+                        <li><a href="/food/about" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li><a href="/food/contact" class="text-white-50 text-decoration-none">Contact</a></li>
+                        <li><a href="/faq/" class="text-white-50 text-decoration-none">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h5 class="mb-3">Categories</h5>
+                    <ul class="list-unstyled">
+                        {% for category in footer_categories|slice:":5" %}
+                        <li><a href="/category/{{ category.slug }}/" class="text-white-50 text-decoration-none">{{ category.name }}</a></li>
+                        {% empty %}
+                        <li><a href="/category/breakfast/" class="text-white-50 text-decoration-none">Breakfast</a></li>
+                        <li><a href="/category/lunch/" class="text-white-50 text-decoration-none">Lunch</a></li>
+                        <li><a href="/category/dinner/" class="text-white-50 text-decoration-none">Dinner</a></li>
+                        <li><a href="/category/desserts/" class="text-white-50 text-decoration-none">Desserts</a></li>
+                        <li><a href="/category/beverages/" class="text-white-50 text-decoration-none">Beverages</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="mb-3">Contact Us</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i> 123 Food Street, Delicious City</li>
+                        <li class="mb-2"><i class="bi bi-telephone-fill me-2"></i> +91 9876543210</li>
+                        <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i> contact@foodapp.com</li>
+                        <li><i class="bi bi-clock-fill me-2"></i> Monday - Sunday: 10:00 AM - 10:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 text-white-50">&copy; 2025 FoodApp. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="/privacy/" class="text-white-50 text-decoration-none me-3">Privacy Policy</a>
+                    <a href="/terms/" class="text-white-50 text-decoration-none me-3">Terms & Conditions</a>
+                    <a href="/sitemap/" class="text-white-50 text-decoration-none">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTop" class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 d-none" 
+            style="width: 45px; height: 45px; z-index: 1000;">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <!-- Cookie Consent -->
+    <div id="cookieConsent" class="alert alert-dark text-center mb-0 rounded-0 fixed-bottom d-none">
+        This website uses cookies to ensure you get the best experience.
+        <button class="btn btn-sm btn-primary ms-3" id="cookieAccept">Accept</button>
+        <a href="/privacy/" class="btn btn-sm btn-outline-secondary ms-2">Learn More</a>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cookie consent
+            const cookieConsent = document.getElementById('cookieConsent');
+            const cookieAccept = document.getElementById('cookieAccept');
+            
+            if (!localStorage.getItem('cookieConsent')) {
+                setTimeout(() => {
+                    cookieConsent.classList.remove('d-none');
+                }, 1000);
+            }
+            
+            cookieAccept.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieConsent.classList.add('d-none');
+            });
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

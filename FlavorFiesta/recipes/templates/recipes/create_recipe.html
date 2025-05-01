@@ -1,0 +1,102 @@
+{% extends "food/base.html" %}
+
+{% block title %}Create a New Recipe - FlavorFiesta{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-4 fw-bold" style="color: var(--primary-color);">Create a New Recipe</h2>
+        <p class="lead text-muted">Share your culinary masterpiece with the FlavorFiesta community</p>
+        <div class="border-bottom w-25 mx-auto my-4" style="border-color: var(--primary-color) !important;"></div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0 rounded-4 overflow-hidden">
+                <div class="card-header bg-light p-4 border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-journal-plus fs-3 me-3" style="color: var(--primary-color);"></i>
+                        <h4 class="mb-0">Recipe Details</h4>
+                    </div>
+                </div>
+                <div class="card-body p-4 p-lg-5">
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label for="id_title" class="form-label fw-semibold">Recipe Title <span class="text-danger">*</span></label>
+                            {{ form.title|safe }}
+                            <div class="form-text">Give your recipe a catchy, descriptive name</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="id_description" class="form-label fw-semibold">Description <span class="text-danger">*</span></label>
+                            {{ form.description|safe }}
+                            <div class="form-text">Tell us about your recipe and what makes it special</div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-4 mb-md-0">
+                                    <label for="id_ingredients" class="form-label fw-semibold">Ingredients <span class="text-danger">*</span></label>
+                                    {{ form.ingredients|safe }}
+                                    <div class="form-text">List each ingredient on a new line</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_instructions" class="form-label fw-semibold">Instructions <span class="text-danger">*</span></label>
+                                {{ form.instructions|safe }}
+                                <div class="form-text">Provide clear step-by-step instructions</div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="id_image" class="form-label fw-semibold">Recipe Image</label>
+                            <div class="input-group">
+                                {{ form.image|safe }}
+                            </div>
+                            <div class="form-text">Upload a high-quality image of your finished dish (JPEG or PNG, max 5MB)</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                            <button type="button" class="btn btn-outline-secondary me-md-2 px-4">Cancel</button>
+                            <button type="submit" class="btn btn-success px-5 py-2 shadow-sm">
+                                <i class="bi bi-check2-circle me-2"></i>Submit Recipe
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4 text-muted">
+                <small>By submitting this recipe, you agree to our <a href="#" class="text-decoration-none">content guidelines</a></small>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize form validation
+    (function() {
+        'use strict';
+        
+        // Fetch all forms that need validation
+        var forms = document.querySelectorAll('.needs-validation');
+        
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
+</script>
+{% endblock %}
