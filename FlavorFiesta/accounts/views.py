@@ -13,31 +13,12 @@ from django.contrib.auth import login , authenticate , logout
 def register(request):
     if request.method == 'POST':
         user_form = UserRegisterForm(request.POST)
-        profile_form = ProfileForm(request.POST, request.FILES)
 
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
-
-            profile, created = Profile.objects.get_or_create(user=user)
-
-            if created:
-                profile.bio = profile_form.cleaned_data['bio']
-                profile.location = profile_form.cleaned_data['location']
-                profile.profile_image = profile_form.cleaned_data['profile_image']
-                profile.birth_date = profile_form.cleaned_data['birth_date']
-                profile.save()
 
             login(request, user)  
             return redirect('accounts:login')  
-
-    else:
-        user_form = UserRegisterForm()
-        profile_form = ProfileForm()
-
-    return render(request, 'favorites/register.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-    })
 
 
 def user_login(request):
