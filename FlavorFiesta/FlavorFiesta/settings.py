@@ -1,13 +1,16 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Optional: Load local .env file in development
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Secret key and other security settings
-SECRET_KEY = 'django-insecure-u-ku^3&t2+z1ok7nhsni&c-4n(9k*=waj9xvn3rk*a+bdhd((('
-DEBUG = True
-ALLOWED_HOSTS = []
+# Security settings
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-dev-key")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ")
 
 # Application definition
 INSTALLED_APPS = [
@@ -23,11 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'whitenoise.runserver_nostatic',
 ]
 
-# Middleware and other configurations
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Required for static files in production
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -37,12 +41,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'FlavorFiesta.urls'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / 'templates',
-        ],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -57,7 +60,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'FlavorFiesta.wsgi.application'
 
-# Database configuration
+# Database (use PostgreSQL in production if available)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -79,23 +82,20 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static files
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Add this if you have a project-level static folder
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-# Media files configuration
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = 'accounts:login'  # Use the named URL pattern for your login view
+# Login
+LOGIN_URL = 'accounts:login'
 
-
-# Default auto field type
+# Default auto field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email configuration
@@ -103,8 +103,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'bokdemehul870@gmail.com'
-EMAIL_HOST_PASSWORD = 'tzth hxsx pcvr vyeo'
-
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-CONTACT_EMAIL = 'bokdemehul870@gmail.com'
+CONTACT_EMAIL = EMAIL_HOST_USER
