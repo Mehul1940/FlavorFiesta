@@ -1,9 +1,5 @@
 from pathlib import Path
 import os
-from dotenv import load_dotenv
-
-# Optional: Load local .env file in development
-load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
